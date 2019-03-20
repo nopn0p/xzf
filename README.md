@@ -8,6 +8,10 @@ xzf is a simple PoC demonstrating how EXIF data can be used for command and cont
 5. Upload the image (not imgur) and add all values to consts.h 
 6. Deploy 
 
+### Requirements 
+- libcurl 
+- libexif
+
 ### References
 - https://www.media.mit.edu/pia/Research/deepview/exif.html
 - https://blog.sucuri.net/2013/07/malware-hidden-inside-jpg-exif-headers.html
