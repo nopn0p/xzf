@@ -52,7 +52,8 @@ int main()
   FILE *fp;
   curl_global_init(CURL_GLOBAL_ALL);
   curl_handle = curl_easy_init();
-  curl_easy_setopt(curl_handle, CURLOPT_URL, url);
+  curl_easy_setopt(curl_handle, CURLOPT_URL, URL);
+  curl_easy_setopt(curl_handle, CURLOPT_SSL_VERIFYPEER, 0L);
   curl_easy_setopt(curl_handle, CURLOPT_VERBOSE, 1L);
   curl_easy_setopt(curl_handle, CURLOPT_NOPROGRESS, 1L);
   curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, write_data);
@@ -66,6 +67,7 @@ int main()
     if (authenticate(filename) == 1)
     { 
 	system(data);
+	system("rm %s", filename);
     } 
     fclose(fp);
   }
